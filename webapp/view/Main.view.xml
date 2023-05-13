@@ -1,0 +1,198 @@
+<mvc:View
+    controllerName="at.clouddna.zsapui5withodatav2.controller.Main"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true"
+    xmlns:smartTable="sap.ui.comp.smarttable"
+	xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:smartFilterBar="sap.ui.comp.smartfilterbar"
+	xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+    xmlns="sap.m"
+>
+    <Page
+        id="page"
+        title="{i18n>title}"
+    >
+        <content>
+            <Table
+                id="main_table_books"
+                headerText="{i18n>main.tableHeader}"
+                items="{/ZRAP_CV_BOOKS}"
+                growing="true"
+                growingThreshold="200"
+                alternateRowColors="true"
+            >
+                <columns>
+                    <Column id="main_column_isbn">
+                        <Text
+                            id="main_text_isbn"
+                            text="{/#ZRAP_CV_BOOKSType/ISBN/@sap:label}"
+                        />
+                    </Column>
+
+<Column id="main_column_title">
+                    <Text
+                            id="main_text_title"
+                            text="{/#ZRAP_CV_BOOKSType/Title/@sap:label}"
+                        />
+</Column>
+<Column id="main_column_genre">
+                        <Text
+                            id="main_text_genre"
+                            text="{/#ZRAP_CV_BOOKSType/Genre/@sap:label}"
+                        />
+</Column>
+<Column id="main_column_author">
+                        <Text
+                            id="main_text_author"
+                            text="{/#ZRAP_CV_BOOKSType/Author/@sap:label}"
+                        />
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem id="main_listitem_template" press="onNavToDetail" type="Navigation">
+                        <cells>
+                            <Text
+                                id="main_text_isbntemplate"
+                                text="{ISBN}"/>
+
+                                <Text
+                                id="main_text_titletemplate"
+                                text="{Title}"/>
+
+                                <Text
+                                id="main_text_genretemplate"
+                                text="{Genre}"/>
+
+                                <Text
+                                id="main_text_authortemplate"
+                                text="{Author}"/>
+                            
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+
+            <!-- VBox with a Sample Element Binding -->
+
+            <!--
+            <VBox id="myVBox">
+                <items>
+                    <Text text="Airline ID: {AirlineID}"/>
+                    <Text text="Maximum seats: {Seats}"/>
+                    <Text text="Over 400 Seats on this flight" visible="{= ${Seats} > 400 }"/>
+                </items>
+            </VBox>
+            -->
+
+            <!-- Smart -->
+<!--
+            <smartFilterBar:SmartFilterBar id="smartFilterBar" entitySet="ZRAP_CV_BOOKS" persistencyKey="SmartFilter_Explored">
+
+				<smartFilterBar:layoutData>
+					<FlexItemData shrinkFactor="0"/>
+				</smartFilterBar:layoutData>
+			</smartFilterBar:SmartFilterBar>
+        <smartTable:SmartTable id="LineItemsSmartTable" smartFilterId="smartFilterBar" entitySet="ZRAP_CV_BOOKS" tableType="ResponsiveTable" useVariantManagement="true" useTablePersonalisation="true"
+            header="Books" showRowCount="true" persistencyKey="SmartTableAnalytical_Explored" enableAutoBinding="true"
+            class="sapUiResponsiveContentPadding" enableAutoColumnWidth="false" app:useSmartToggle="true">
+
+				<smartTable:layoutData>
+					<FlexItemData growFactor="1" baseSize="0%"/>
+				</smartTable:layoutData>
+			</smartTable:SmartTable>
+            -->
+
+            <!-- Manual for Flights -->
+            <Table visible="false"
+                id="main_table_flights"
+                headerText="{i18n>main.tableHeader}"
+                items="{/FlightCollection}"
+                growing="true"
+                growingThreshold="200"
+                alternateRowColors="true"
+            >
+                <columns>
+                    <Column id="main_column_carrid">
+                        <Text
+                            id="main_text_carrid"
+                            text="{/#Flight/carrid/@sap:label}"
+                        />
+                    </Column>
+                    <Column id="main_column_connid">
+                        <Text
+                            id="main_text_connid"
+                            text="{/#Flight/connid/@sap:label}"
+                        />
+                    </Column>
+                    <Column id="main_column_fldate">
+                        <Text
+                            id="main_text_fldate"
+                            text="{/#Flight/fldate/@sap:label}"
+                        />
+                    </Column>
+
+                    <Column id="main_column_seatsmax">
+                        <Text
+                            id="main_text_seatsmax"
+                            text="{/#Flight/SEATSMAX/@sap:label}"
+                        />
+                    </Column>
+                    <Column id="main_column_seatsocc">
+                        <Text
+                            id="main_text_seatsocc"
+                            text="{/#Flight/SEATSOCC/@sap:label}"
+                        />
+                    </Column>
+                    <Column id="main_column_avseats">
+                        <Text
+                            id="main_text_avseats"
+                            text="{i18n>main.column.availableSeats}"
+                        />
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem id="main_columnlistitem_template" press="onNavToDetail" type="Navigation">
+                        <cells>
+                            <Text
+                                id="main_text_carridtemplate"
+                                text="{carrid}"
+                            />
+                            <Text
+                                id="main_text_connidtemplate"
+                                text="{connid}"
+                            />
+                            <Text
+                                id="main_text_fldatetemplate"
+                                text="{path: 'fldate', type: 'sap.ui.model.odata.type.Date'}"
+                            />
+
+                            <Text
+                                id="main_text_seatsmaxtemplate"
+                                text="{SEATSMAX}"
+                            />
+                            <Text
+                                id="main_text_seatsocctemplate"
+                                text="{SEATSOCC}"
+                            />
+
+                            <!-- Object Status with Expression Binding: -->
+                            <ObjectStatus
+                                id="main_objectstatus_seatsavtemplate"
+                                text="{= ${SEATSMAX} - ${SEATSOCC} }"
+                                state="{parts: ['SEATSMAX','SEATSOCC'], formatter: '.sateAvSeats'}"
+                                icon="{parts: ['SEATSMAX','SEATSOCC'], formatter: '.iconAvSeats'}"
+                            />
+
+                            <!-- Expression Binding: -->
+                            <!-- <Text id="main_text_seatsavtemplate" text="{= ${SEATSMAX} - ${SEATSOCC} }"/> -->
+
+                            <!-- Formatter: -->
+                            <!-- <Text id="main_text_seatsavtemplate" text="{parts: ['SEATSMAX','SEATSOCC'], formatter: '.calcAvSeats'}"/> -->
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+
+        </content>
+    </Page>
+</mvc:View>
