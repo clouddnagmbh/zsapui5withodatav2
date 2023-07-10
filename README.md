@@ -21,6 +21,14 @@
 
 A Fiori application.
 
+### After cloning the project
+
+-   Once you have imported the application it is very important that you run the following command at the root folder level:
+
+```
+    npm install
+```
+
 ### Starting the generated app
 
 -   This app has been generated using the SAP Fiori tools - App Generator, as part of the SAP Fiori tools suite.  In order to launch the generated app, simply run the following from the generated app root folder:
@@ -38,5 +46,3 @@ A Fiori application.
 #### Pre-requisites:
 
 1. Active NodeJS LTS (Long Term Support) version and associated supported NPM version.  (See https://nodejs.org)
-
-
