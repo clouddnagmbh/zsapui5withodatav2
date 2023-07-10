@@ -93,7 +93,7 @@
         "settings": {
           "defaultBindingMode": "TwoWay",
           "defaultCountMode": "Inline",
-          "refreshAfterChange": false
+          "refreshAfterChange": true
         }
       }
     },
@@ -131,7 +131,7 @@
         },
         {
           "name": "Create",
-          "pattern": "mandatoyParamDetail/{path}",
+          "pattern": "mandatoyParamCreate/{path}",
           "target": [
             "Detail"
           ]

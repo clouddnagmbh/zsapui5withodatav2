@@ -4,7 +4,7 @@
                 emptySpanM="4" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1" >
                 <f:content>
                     <Label id="detail_label_isbn" text="{/#ZRAP_CV_BOOKSType/ISBN/@sap:label}" />
-                    <Input id="detail_input_isbn" value="{ISBN}"/>
+                    <Input id="detail_input_isbn" value="{detailModel>/ISBN}"/>
 
                     <Label id="detail_label_title" text="{/#ZRAP_CV_BOOKSType/Title/@sap:label}" />
                     <Input id="detail_input_title" value="{Title}"/>

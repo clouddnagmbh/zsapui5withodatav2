@@ -32,7 +32,16 @@ sap.ui.define([
                     oListItem = oEvent.getSource(),
                     oSourceBinding = oListItem.getBindingContext(),
                     sPath = oSourceBinding.getPath();
-
+                    
+                /*
+                oRouter.navTo("Detail", {
+                    query: {
+                        param1: "ABC",
+                        param2: "123"
+                    }
+                });
+                */
+                
                 oRouter.navTo("Detail", {
                     path: encodeURIComponent(sPath)
                 });

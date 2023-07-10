@@ -9,7 +9,9 @@
                 <Title id="detail_title_header" text="Details"/>
                 <ToolbarSpacer id="detail_spacer_header"/>
                 <Button id="detail_button_edit" text="Edit" type="Emphasized" press="onEditPressed"
-                    visible="{= ${Update_mc} &amp;&amp; !${editModel>/editMode}}"/>
+                    visible="{= !${editModel>/editMode}}"/>
+                <Button id="detail_button_delete" text="Delete" type="Reject" press="onDeletePressed"
+                    icon="sap-icon://delete" visible="{= !${editModel>/editMode}}"/>
             </OverflowToolbar>
         </customHeader>
 

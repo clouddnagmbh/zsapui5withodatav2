@@ -1,36 +1,73 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
-    "sap/ui/model/json/JSONModel"
+    "sap/ui/model/json/JSONModel",
+    "sap/m/MessageBox",
+    "sap/ui/core/routing/History"
 ],
     /**
      * @param {typeof sap.ui.core.mvc.Controller} Controller
      */
-    function (Controller, JSONModel) {
+    function (Controller, JSONModel, MessageBox, History) {
         "use strict";
 
         return Controller.extend("at.clouddna.zsapui5withodatav2.controller.Detail", {
+
+            aFragments: {},
+
             onInit: function(){
                 let oRouter = this.getOwnerComponent().getRouter(),
                 oRoute = oRouter.getRoute("Detail");
 
                 oRoute.attachPatternMatched(this.onPatternMatched,this);
 
-                this.oEditModel = new JSONModel({
-                    editMode: false
-                });
-
-                this.getView().setModel(this.oEditModel, "editModel");
-
-                this.aFragments = {};
-
-                this._loadFragment("Display");
+                oRouter.getRoute("Create").attachPatternMatched(this.onCreatePatternMatched,this);
             },
 
             onPatternMatched: function(oEvent){
                 let oArguments = oEvent.getParameters().arguments,
                     sPath = decodeURIComponent(oArguments.path);
 
-                this.getView().bindElement(sPath);
+                //MessageBox.show("Param 1: " + oArguments["?query"].param1 + "\nParam2: " + oArguments["?query"].param2);
+
+                //this.getView().bindElement(sPath);
+                
+                this.oEditModel = new JSONModel({
+                    editMode: false,
+                    create: false
+                });
+
+                this.getView().setModel(this.oEditModel, "editModel");
+
+                this.sPath = sPath;
+                this.getView().getModel().read(this.sPath, {
+                    success: (oData) => {
+                        this.getView().setModel(new JSONModel(oData), "detailModel");
+                    }
+                });
+
+                this._loadFragment("Display");
+            },
+
+            onCreatePatternMatched: function(oEvent){
+                let oArguments = oEvent.getParameters().arguments,
+                    sPath = decodeURIComponent(oArguments.path);
+
+                //MessageBox.show("Param 1: " + oArguments["?query"].param1 + "\nParam2: " + oArguments["?query"].param2);
+
+                //this.getView().bindElement(sPath);
+                
+                this.oEditModel = new JSONModel({
+                    editMode: true,
+                    create: true
+                });
+
+                this.getView().setModel(this.oEditModel, "editModel");
+
+                this.getView().setModel(new JSONModel({
+                    ISBN: null
+                }), "detailModel");
+
+                this._loadFragment("Edit");
             },
 
             onEditPressed: function(){
@@ -64,15 +101,51 @@ sap.ui.define([
             },
 
             onSavePressed: function(){
+                let oDetailData = this.getView().getModel("detailModel").getData(),
+                    oEditModel = this.getView().getModel("editModel").getData();
+
+                if(oEditModel.create){
+                    this.getView().getModel().create("/ZRAP_CV_BOOKS", oDetailData, {
+                        success: (oCreateData) => {
+                            sap.m.MessageToast.show("Successfully saved!");
+                            this.onNavBack();
+                        },
+                        error: (oError) => {
+                            sap.m.MessageToast.show("An error occured!");
+                        }
+                    });
+                }else{
+                    let sPath = this.getView().getElementBinding().getPath();
+
+                    this.getView().getModel().update(this.sPath, oDetailData, {
+                        success: (oUpdateData) => {
+                            sap.m.MessageToast.show("Successfully saved!");
+                            this._onSwitchEdit();
+                        },
+                        error: (oError) => {
+                            sap.m.MessageToast.show("An error occured!");
+                        }
+                    });
+                }
+                
+
+                /*
+                let oEditModel = this.getView().getModel("editModel").getData();
+                
                 this.getView().getModel().submitChanges({
-                    success: () => {
+                    success: (oCreatedData) => {
                         sap.m.MessageToast.show("Successfully saved!");
                         this._onSwitchEdit();
+
+                        if(oEditModel.create){
+                            this.onNavBack();
+                        }
                     },
-                    error: () => {
+                    error: (oError) => {
                         sap.m.MessageToast.show("An error occured!");
                     }
                 });
+                */
             },
 
             onCancelPressed: function(){
@@ -88,6 +161,41 @@ sap.ui.define([
 
                 if(!oEvent.getParameters().editable){
                     this.onCancelPressed();
+                }
+            },
+
+            onDeletePressed: function(){
+                let sPath = this.getView().getElementBinding().getPath(),
+                    i18nModel = this.getView().getModel("i18n"),
+                    oResourceBundle = i18nModel.getResourceBundle(),
+                    sText = oResourceBundle.getText("deleteQuestion");
+                MessageBox.confirm(sText, {
+                    actions: [MessageBox.Action.YES, MessageBox.Action.NO],
+                    emphasizedAction: MessageBox.Action.YES,
+                    onClose: (sAction) => {
+                        if(MessageBox.Action.YES === sAction){
+                            this.getView().getModel().remove(sPath, {
+                                success: () => {
+                                    this.onNavBack();
+                                },
+                                error: (oError) => {
+                                    sap.m.MessageToast.show("An error occured!");
+                                }
+                            });
+                        }
+                    }
+                });
+            },
+
+            onNavBack: function () {
+                var oHistory = History.getInstance();
+                var sPreviousHash = oHistory.getPreviousHash();
+    
+                if (sPreviousHash !== undefined) {
+                    window.history.go(-1);
+                } else {
+                    var oRouter = this.getOwnerComponent().getRouter();
+                    oRouter.navTo("Main", {}, true);
                 }
             }
 

@@ -6,12 +6,10 @@
 	xmlns:html="http://www.w3.org/1999/xhtml"
     xmlns:smartFilterBar="sap.ui.comp.smartfilterbar"
 	xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
-    xmlns="sap.m"
->
+    xmlns="sap.m">
     <Page
         id="page"
-        title="{i18n>title}"
-    >
+        title="{i18n>title}">
         <content>
             <Table
                 id="main_table_books"
@@ -19,8 +17,14 @@
                 items="{/ZRAP_CV_BOOKS}"
                 growing="true"
                 growingThreshold="200"
-                alternateRowColors="true"
-            >
+                alternateRowColors="true">
+                <headerToolbar>
+                    <Toolbar id="main_table_toolbar">
+                        <Title id="main_table_title" text="{i18n>main.tableHeader}"/>
+                        <ToolbarSpacer id="main_table_toolbarspacer"/>
+                        <Button id="main_table_createbutton" text="{i18n>main.createButton}" press="onCreatePressed"/>
+                    </Toolbar>
+                </headerToolbar>
                 <columns>
                     <Column id="main_column_isbn">
                         <Text
@@ -103,6 +107,7 @@
             -->
 
             <!-- Manual for Flights -->
+            <!-- 
             <Table visible="false"
                 id="main_table_flights"
                 headerText="{i18n>main.tableHeader}"
@@ -175,7 +180,7 @@
                                 text="{SEATSOCC}"
                             />
 
-                            <!-- Object Status with Expression Binding: -->
+                            Object Status with Expression Binding:
                             <ObjectStatus
                                 id="main_objectstatus_seatsavtemplate"
                                 text="{= ${SEATSMAX} - ${SEATSOCC} }"
@@ -183,15 +188,16 @@
                                 icon="{parts: ['SEATSMAX','SEATSOCC'], formatter: '.iconAvSeats'}"
                             />
 
-                            <!-- Expression Binding: -->
-                            <!-- <Text id="main_text_seatsavtemplate" text="{= ${SEATSMAX} - ${SEATSOCC} }"/> -->
+                            Expression Binding:
+                            <Text id="main_text_seatsavtemplate" text="{= ${SEATSMAX} - ${SEATSOCC} }"/>
 
-                            <!-- Formatter: -->
-                            <!-- <Text id="main_text_seatsavtemplate" text="{parts: ['SEATSMAX','SEATSOCC'], formatter: '.calcAvSeats'}"/> -->
+                            Formatter: 
+                            <Text id="main_text_seatsavtemplate" text="{parts: ['SEATSMAX','SEATSOCC'], formatter: '.calcAvSeats'}"/>
                         </cells>
                     </ColumnListItem>
                 </items>
             </Table>
+            -->
 
         </content>
     </Page>
